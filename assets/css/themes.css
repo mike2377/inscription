@@ -1,0 +1,38 @@
+:root {
+    /* Couleurs principales */
+    --primary-color: #3498db;
+    --primary-dark: #2980b9;
+    --primary-light: #ebf5fb;
+    
+    /* Accents */
+    --accent-color: #2ecc71;
+    --accent-dark: #27ae60;
+    
+    /* Neutres */
+    --white: #ffffff;
+    --light-gray: #f8f9fa;
+    --medium-gray: #e9ecef;
+    --dark-gray: #343a40;
+    
+    /* Alertes */
+    --success-color: #2ecc71;
+    --warning-color: #f39c12;
+    --error-color: #e74c3c;
+    
+    /* Typographie */
+    --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-size-base: 16px;
+}
+
+/* Harmonisation des couleurs W3.CSS avec notre thème */
+.w3-theme {
+    color: var(--white) !important;
+    background-color: var(--primary-color) !important;
+}
+.w3-theme-dark {
+    background-color: var(--primary-dark) !important;
+}
+.w3-theme-light {
+    color: var(--dark-gray) !important;
+    background-color: var(--primary-light) !important;
+}
