@@ -11,9 +11,9 @@
         </tr>
         <?php foreach ($fiches as $fiche): ?>
             <tr>
-                <td><?= htmlspecialchars($fiche['nom']) ?></td>
-                <td><?= htmlspecialchars($fiche['prenom']) ?></td>
-                <td><?= htmlspecialchars($fiche['email']) ?></td>
+                <td><?= htmlspecialchars($fiche['nom'] ?? '') ?></td>
+                <td><?= htmlspecialchars($fiche['prenom'] ?? '') ?></td>
+                <td><?= htmlspecialchars($fiche['email'] ?? '') ?></td>
                 <td><?= htmlspecialchars($fiche['statut'] ?? 'Non renseigné') ?></td>
                 <td><a class="w3-button w3-small w3-green" href="/inscription/index.php?page=admin_edit_student&id=<?= $fiche['id'] ?>">Voir</a></td>
             </tr>

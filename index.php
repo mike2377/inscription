@@ -71,23 +71,43 @@ switch ($page) {
         break;
     case 'admin_students':
         // Connexion à la base de données
-        $stmt = $pdo->query('SELECT u.id, u.email, f.statut FROM utilisateurs u LEFT JOIN fiches_inscription f ON u.id = f.utilisateur_id WHERE u.role = "etudiant"');
+        $stmt = $pdo->query('SELECT f.*, u.email FROM fiches_inscription f LEFT JOIN utilisateurs u ON f.utilisateur_id = u.id');
         $fiches = $stmt->fetchAll(PDO::FETCH_ASSOC);
         require_once __DIR__ . '/views/admin/students.php';
         break;
     case 'admin_edit_student':
         if (isset($_GET['id'])) {
             $fiche_id = $_GET['id'];
-            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fiche_id'], $_POST['statut'])) {
-                $nv_statut = $_POST['statut'];
-                // Correction : l'id de la fiche doit être l'id de la fiche_inscription, pas de l'utilisateur
-                $stmt = $pdo->prepare('UPDATE fiches_inscription SET statut = ? WHERE utilisateur_id = ?');
-                $stmt->execute([$nv_statut, $fiche_id]);
-                $update_success = "Statut mis à jour !";
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fiche_id'])) {
+                // Récupère tous les champs modifiables
+                $fields = [
+                    'nom','prenom','date_naissance','lieu_naissance','sexe','nationalite','adresse','email','telephone','diplome','etablissement_precedent','formation','specialisation',
+                    'urgence_nom','urgence_relation','urgence_telephone','urgence_email','commentaires','statut'
+                ];
+                $set = [];
+                $values = [];
+                foreach ($fields as $field) {
+                    if (isset($_POST[$field])) {
+                        $set[] = "$field = ?";
+                        $values[] = $_POST[$field];
+                    }
+                }
+                if (!empty($set)) {
+                    $values[] = $fiche_id;
+                    $sql = 'UPDATE fiches_inscription SET ' . implode(', ', $set) . ' WHERE id = ?';
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute($values);
+                    $update_success = "Fiche mise à jour !";
+                }
             }
-            $stmt = $pdo->prepare('SELECT u.email, f.* FROM utilisateurs u LEFT JOIN fiches_inscription f ON u.id = f.utilisateur_id WHERE u.id = ?');
+            // Récupérer tous les détails de la fiche
+            $stmt = $pdo->prepare('SELECT f.*, u.email FROM fiches_inscription f LEFT JOIN utilisateurs u ON f.utilisateur_id = u.id WHERE f.id = ?');
             $stmt->execute([$fiche_id]);
             $fiche = $stmt->fetch(PDO::FETCH_ASSOC);
+            // Récupérer les documents associés à la fiche
+            $stmt = $pdo->prepare('SELECT * FROM documents WHERE fiche_id = ?');
+            $stmt->execute([$fiche_id]);
+            $documents = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         require_once __DIR__ . '/views/admin/edit-student.php';
         break;
