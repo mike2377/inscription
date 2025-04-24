@@ -26,7 +26,6 @@ switch ($page) {
             $mot_de_passe = $_POST['mot_de_passe'];
 
             // Connexion à la base de données
-            $pdo = new PDO('mysql:host=localhost;dbname=inscription_db', 'root', '');
             $stmt = $pdo->prepare('SELECT * FROM utilisateurs WHERE email = ?');
             $stmt->execute([$email]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -54,9 +53,6 @@ switch ($page) {
             $telephone = $_POST['telephone'];
             $mot_de_passe = $_POST['mot_de_passe'];
 
-            // Connexion à la base de données
-            $pdo = new PDO('mysql:host=localhost;dbname=inscription_db', 'root', '');
-
             // Vérifier si l'email existe déjà
             $stmt = $pdo->prepare('SELECT * FROM utilisateurs WHERE email = ?');
             $stmt->execute([$email]);
@@ -75,7 +71,6 @@ switch ($page) {
         break;
     case 'admin_students':
         // Connexion à la base de données
-        $pdo = new PDO('mysql:host=localhost;dbname=inscription_db', 'root', '');
         $stmt = $pdo->query('SELECT u.id, u.email, f.statut FROM utilisateurs u LEFT JOIN fiches_inscription f ON u.id = f.utilisateur_id WHERE u.role = "etudiant"');
         $fiches = $stmt->fetchAll(PDO::FETCH_ASSOC);
         require_once __DIR__ . '/views/admin/students.php';
@@ -83,7 +78,6 @@ switch ($page) {
     case 'admin_edit_student':
         if (isset($_GET['id'])) {
             $fiche_id = $_GET['id'];
-            $pdo = new PDO('mysql:host=localhost;dbname=inscription_db', 'root', '');
             if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fiche_id'], $_POST['statut'])) {
                 $nv_statut = $_POST['statut'];
                 // Correction : l'id de la fiche doit être l'id de la fiche_inscription, pas de l'utilisateur
@@ -100,8 +94,7 @@ switch ($page) {
     case 'student_dashboard':
         if (isset($_SESSION['user_id'])) {
             $etudiant_id = $_SESSION['user_id'];
-            $pdo = new PDO('mysql:host=localhost;dbname=inscription_db', 'root', '');
-            $stmt = $pdo->prepare('SELECT * FROM fiches_inscription WHERE utilisateur_id = ?');
+           $stmt = $pdo->prepare('SELECT * FROM fiches_inscription WHERE utilisateur_id = ?');
             $stmt->execute([$etudiant_id]);
             $fiche = $stmt->fetch(PDO::FETCH_ASSOC);
         }
@@ -110,7 +103,6 @@ switch ($page) {
     case 'student_profile':
         if (isset($_SESSION['user_id'])) {
             $etudiant_id = $_SESSION['user_id'];
-            $pdo = new PDO('mysql:host=localhost;dbname=inscription_db', 'root', '');
             $stmt = $pdo->prepare('SELECT u.email, f.* FROM utilisateurs u LEFT JOIN fiches_inscription f ON u.id = f.utilisateur_id WHERE u.id = ?');
             $stmt->execute([$etudiant_id]);
             $fiche = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -120,7 +112,6 @@ switch ($page) {
     case 'student_edit_profile':
         if (isset($_SESSION['user_id'])) {
             $etudiant_id = $_SESSION['user_id'];
-            $pdo = new PDO('mysql:host=localhost;dbname=inscription_db', 'root', '');
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $adresse = $_POST['adresse'] ?? '';
                 $email = $_POST['email'] ?? '';
@@ -155,7 +146,6 @@ switch ($page) {
     case 'student_upload_documents':
         if (isset($_SESSION['user_id'])) {
             $etudiant_id = $_SESSION['user_id'];
-            $pdo = new PDO('mysql:host=localhost;dbname=inscription_db', 'root', '');
             // Récupère la fiche
             $stmt = $pdo->prepare('SELECT id FROM fiches_inscription WHERE utilisateur_id = ?');
             $stmt->execute([$etudiant_id]);
@@ -195,7 +185,6 @@ switch ($page) {
     case 'student_create_fiche':
         if (isset($_SESSION['user_id'])) {
             $etudiant_id = $_SESSION['user_id'];
-            $pdo = new PDO('mysql:host=localhost;dbname=inscription_db', 'root', '');
             // Récupère les infos utilisateur
             $stmt = $pdo->prepare('SELECT email FROM utilisateurs WHERE id = ?');
             $stmt->execute([$etudiant_id]);
