@@ -1,0 +1,24 @@
+/* Styles pour l'interface admin */
+
+/* Styles pour la liste des étudiants */
+.student-row {
+  transition: background-color 0.2s ease;
+}
+.student-row:hover {
+  background-color: #f8f9fa;
+}
+.btn-group .btn {
+  border-radius: 0.375rem !important;
+  margin: 0 1px;
+}
+
+/* Styles pour le dashboard admin */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #1565c0 0%, #42a5f5 100%);
+}
+.hover-lift {
+  transition: transform 0.2s ease-in-out;
+}
+.hover-lift:hover {
+  transform: translateY(-5px);
+} 

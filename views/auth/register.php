@@ -1,41 +1,100 @@
+<?php
+// Empêcher l'inclusion du header/footer pour cette page
+$is_auth_page = true;
+?>
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Inscription</title>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Inscription - Université Cosendai</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- CSS Dependencies -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/inscription/assets/css/auth.css">
 </head>
-<body class="w3-container">
-
-<div class="w3-card w3-margin-top w3-padding w3-light-grey w3-round-large" style="max-width:600px; margin:auto;">
-    <h2 class="w3-center">Inscription Étudiant</h2>
-    <?php if (!empty($register_error)): ?>
-        <div class="w3-panel w3-red w3-round-large w3-margin-bottom w3-center">
-            <?= htmlspecialchars($register_error) ?>
+<body class="auth-bg">
+    <div class="container d-flex align-items-center justify-content-center min-vh-100 py-5">
+        <div class="card p-4 shadow-lg rounded-4 auth-card bg-white" style="max-width:480px; width:100%; margin: 20px;">
+            <div class="text-center mb-4">
+                <img src="/inscription/assets/images/logo.jpg" alt="Logo UAC" width="70" height="70" class="bg-white rounded-circle shadow-sm p-2 mb-3">
+                <h3 class="text-primary fw-bold">Université Cosendai</h3>
+                <p class="text-muted">Créez votre compte étudiant</p>
+            </div>
+            
+            <?php if (!empty($register_error)): ?>
+                <div class="alert alert-danger text-center py-2 rounded-3 mb-3">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <?= htmlspecialchars($register_error) ?>
+                </div>
+            <?php endif; ?>
+            
+            <?php if (!empty($register_success)): ?>
+                <div class="alert alert-success text-center py-2 rounded-3 mb-3">
+                    <i class="bi bi-check-circle me-2"></i>
+                    <?= htmlspecialchars($register_success) ?>
+                </div>
+            <?php endif; ?>
+            
+            <form method="POST" action="?page=register">
+                <input type="hidden" name="action" value="register">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Email</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="bi bi-envelope text-primary"></i>
+                        </span>
+                        <input class="form-control border-start-0" type="email" name="email" required placeholder="Votre adresse email">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Téléphone</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="bi bi-telephone text-primary"></i>
+                        </span>
+                        <input class="form-control border-start-0" type="text" name="telephone" required placeholder="Votre numéro de téléphone">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Mot de passe</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="bi bi-lock text-primary"></i>
+                        </span>
+                        <input class="form-control border-start-0" type="password" name="mot_de_passe" required placeholder="Créer un mot de passe">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Confirmer le mot de passe</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="bi bi-lock-fill text-primary"></i>
+                        </span>
+                        <input class="form-control border-start-0" type="password" name="confirmer_mot_de_passe" required placeholder="Répétez le mot de passe">
+                    </div>
+                </div>
+                <button class="btn btn-primary w-100 mb-3 py-2" type="submit">
+                    <i class="bi bi-person-plus me-2"></i>S'inscrire
+                </button>
+                <a href="/inscription/index.php" class="btn btn-outline-secondary w-100 py-2">
+                    <i class="bi bi-arrow-left me-2"></i>Retour à l'accueil
+                </a>
+            </form>
+            
+            <div class="text-center mt-4 pt-3 border-top">
+                <p class="text-muted mb-0">
+                    Déjà inscrit ? 
+                    <a href="?page=login" class="text-primary fw-semibold text-decoration-none">Connexion</a>
+                </p>
+            </div>
         </div>
-    <?php endif; ?>
-    <?php if (!empty($register_success)): ?>
-        <div class="w3-panel w3-green w3-round-large w3-margin-bottom w3-center">
-            <?= htmlspecialchars($register_success) ?>
-        </div>
-    <?php endif; ?>
-    <form method="POST" action="?page=register">
-        <input type="hidden" name="action" value="register">
+    </div>
 
-        <label>Email</label>
-        <input class="w3-input w3-border" type="email" name="email" required>
-
-        <label>Téléphone</label>
-        <input class="w3-input w3-border" type="text" name="telephone" required>
-
-        <label>Mot de passe</label>
-        <input class="w3-input w3-border" type="password" name="mot_de_passe" required>
-
-        <button class="w3-button w3-green w3-block w3-margin-top">S'inscrire</button>
-    </form>
-    <p class="w3-center w3-small w3-margin-top">
-        Déjà inscrit ? <a href="?page=login">Connexion</a>
-    </p>
-</div>
-
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

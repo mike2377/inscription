@@ -1,0 +1,40 @@
+/* Styles pour l'interface étudiant */
+
+/* Styles pour le dashboard étudiant */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #1565c0 0%, #42a5f5 100%);
+}
+.hover-lift {
+  transition: transform 0.2s ease-in-out;
+}
+.hover-lift:hover {
+  transform: translateY(-5px);
+}
+
+/* Styles pour l'upload de documents */
+.upload-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.upload-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+.upload-zone {
+  border: 2px dashed #dee2e6;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+.upload-zone:hover {
+  border-color: #1565c0;
+  background-color: #f8f9fa;
+}
+.upload-zone.dragover {
+  border-color: #1565c0;
+  background-color: #e3f2fd;
+}
+.document-item {
+  transition: transform 0.2s ease-in-out;
+}
+.document-item:hover {
+  transform: translateY(-2px);
+} 

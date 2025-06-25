@@ -35,4 +35,17 @@ function update_registration_address($id, $adresse) {
     $stmt = $pdo->prepare("UPDATE fiches_inscription SET adresse = ?, date_soumission = NOW() WHERE id = ?");
     return $stmt->execute([$adresse, $id]);
 }
+
+function count_total_students() {
+    global $pdo;
+    $stmt = $pdo->query("SELECT COUNT(*) FROM utilisateurs WHERE role = 'etudiant'");
+    return $stmt->fetchColumn();
+}
+
+function count_fiches_by_statut($statut) {
+    global $pdo;
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM fiches_inscription WHERE statut = ?");
+    $stmt->execute([$statut]);
+    return $stmt->fetchColumn();
+}
 ?>

@@ -41,6 +41,7 @@ CREATE TABLE documents (
     fiche_id INT,
     type_document VARCHAR(100),
     chemin VARCHAR(255),
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (fiche_id) REFERENCES fiches_inscription(id)
 );
 

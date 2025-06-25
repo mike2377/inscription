@@ -1,42 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Système d'inscription - Cosendai</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; }
-        .w3-sidebar { width: 250px; background: #2e7d32; }
-        .w3-sidebar a { color: white; }
-        .w3-topbar { background: #4CAF50; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Système d'inscription - Cosendai</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- CSS Dependencies -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/inscription/assets/css/main.css">
+    <link rel="stylesheet" href="/inscription/assets/css/landing.css">
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Script principal de l'application -->
+    <script src="/inscription/assets/js/app.js"></script>
 </head>
-<body>
+<body style="background-color: #f5f7fa;">
 
-<!-- Top bar -->
-<div class="w3-top w3-bar w3-topbar w3-large w3-text-white">
-    <span class="w3-bar-item">🎓 Cosendai Inscriptions</span>
-    <a href="../../index.php" class="w3-bar-item w3-button w3-right">Accueil</a>
-    <a href="/inscription/controllers/AuthController.php?logout=true" class="w3-bar-item w3-button w3-right">Déconnexion</a>
-</div>
-
-<!-- Sidebar -->
-<?php if (isset($_SESSION['role'])): ?>
-<div class="w3-sidebar w3-bar-block w3-collapse w3-card-4 w3-animate-left" id="mySidebar">
-    <h3 class="w3-bar-item">Menu</h3>
-    <?php if ($_SESSION['role'] === 'etudiant'): ?>
-        <a href="/inscription/index.php?page=student_dashboard" class="w3-bar-item w3-button">🏠 Tableau de bord</a>
-        <?php if (!empty($fiche)): ?>
-            <a href="/inscription/index.php?page=student_profile" class="w3-bar-item w3-button">👤 Ma fiche</a>
-            <a href="/inscription/index.php?page=student_edit_profile" class="w3-bar-item w3-button">✏️ Modifier mes infos</a>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #1565c0;">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="/inscription/index.php">Université Cosendai</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <?php if (isset($_SESSION['role']) && ($_SESSION['role'] === 'admin' || $_SESSION['role'] === 'etudiant')): ?>
+          <li class="nav-item"><a class="btn btn-primary" href="/inscription/controllers/AuthController.php?logout=true">Déconnexion</a></li>
+        <?php else: ?>
+          <li class="nav-item"><a class="nav-link" href="/inscription/index.php">Accueil</a></li>
+          <li class="nav-item"><a class="nav-link" href="/inscription/index.php#steps">Processus</a></li>
+          <li class="nav-item"><a class="nav-link" href="/inscription/index.php#documents">Documents</a></li>
+          <li class="nav-item"><a class="nav-link" href="/inscription/index.php#faq">FAQ</a></li>
+          <li class="nav-item"><a class="btn btn-outline-primary" href="/inscription/index.php?page=login">Connexion</a></li>
+          <li class="nav-item"><a class="btn btn-primary" href="/inscription/index.php?page=register">Inscription</a></li>
         <?php endif; ?>
-        <a href="/inscription/index.php?page=student_upload_documents" class="w3-bar-item w3-button">📄 Mes documents</a>
-    <?php elseif ($_SESSION['role'] === 'admin'): ?>
-        <a href="/inscription/index.php?page=admin_dashboard" class="w3-bar-item w3-button">🏠 Dashboard</a>
-        <a href="/inscription/index.php?page=admin_students" class="w3-bar-item w3-button">👥 Fiches étudiants</a>
-    <?php endif; ?>
-</div>
-<?php endif; ?>
+      </ul>
+    </div>
+  </div>
+</nav>
 
-<!-- Page Content -->
-<div class="w3-main" style="margin-left:260px; margin-top:50px;">
+<div class="container-fluid p-0" style="margin-top: 76px;">
+  <div class="row g-0">
+    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+      <?php include __DIR__.'/sidebar.php'; ?>
+    <?php elseif (isset($_SESSION['role']) && $_SESSION['role'] === 'etudiant'): ?>
+      <?php include __DIR__.'/sidebar.php'; ?>
+    <?php endif; ?>
+    <main class="<?php echo isset($_SESSION['role']) ? 'col-md-9 ms-sm-auto col-lg-10 p-0' : 'col-12 p-0'; ?>">

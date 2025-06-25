@@ -34,10 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['role'] = $user['role'];
             if ($user['role'] === 'admin') {
-                header('Location: ../views/admin/dashboard.php');
+                header('Location: /inscription/index.php?page=admin_dashboard');
             } else {
-                header('Location: ../views/student/dashboard.php');
+                header('Location: /inscription/index.php?page=student_dashboard');
             }
+            exit;
         } else {
             echo 'Identifiants invalides.';
         }

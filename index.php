@@ -166,12 +166,13 @@ switch ($page) {
     case 'student_upload_documents':
         if (isset($_SESSION['user_id'])) {
             $etudiant_id = $_SESSION['user_id'];
-            // Récupère la fiche
-            $stmt = $pdo->prepare('SELECT id FROM fiches_inscription WHERE utilisateur_id = ?');
+            // Récupère la fiche complète
+            $stmt = $pdo->prepare('SELECT * FROM fiches_inscription WHERE utilisateur_id = ?');
             $stmt->execute([$etudiant_id]);
-            $fiche_id = $stmt->fetchColumn();
-            if (!$fiche_id) {
-                $upload_success = "Merci de compléter votre fiche avant d'envoyer des documents.";
+            $fiche = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$fiche) {
+                // Pas de fiche, on ne peut pas uploader de documents
                 $documents = [];
             } else {
                 // Upload
@@ -189,14 +190,14 @@ switch ($page) {
                         if (!is_dir('uploads')) mkdir('uploads');
                         if (move_uploaded_file($_FILES[$field]['tmp_name'], $dest)) {
                             $stmt = $pdo->prepare('INSERT INTO documents (fiche_id, type_document, chemin) VALUES (?, ?, ?)');
-                            $stmt->execute([$fiche_id, $label, $dest]);
+                            $stmt->execute([$fiche['id'], $label, $dest]);
                             $upload_success = ($upload_success ?? '') . " $label envoyé.";
                         }
                     }
                 }
                 // Liste des documents déjà envoyés
-                $stmt = $pdo->prepare('SELECT type_document, chemin FROM documents WHERE fiche_id = ?');
-                $stmt->execute([$fiche_id]);
+                $stmt = $pdo->prepare('SELECT id, type_document, chemin, date_creation FROM documents WHERE fiche_id = ?');
+                $stmt->execute([$fiche['id']]);
                 $documents = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         }
@@ -210,6 +211,8 @@ switch ($page) {
             $stmt->execute([$etudiant_id]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $nom = $_POST['nom'] ?? '';
+                $prenom = $_POST['prenom'] ?? '';
                 $date_naissance = $_POST['date_naissance'] ?? '';
                 $lieu_naissance = $_POST['lieu_naissance'] ?? '';
                 $sexe = $_POST['sexe'] ?? '';
@@ -226,8 +229,8 @@ switch ($page) {
                 $urgence_telephone = $_POST['urgence_telephone'] ?? '';
                 $urgence_email = $_POST['urgence_email'] ?? '';
                 // Crée la fiche
-                $stmt = $pdo->prepare('INSERT INTO fiches_inscription (utilisateur_id, date_naissance, lieu_naissance, sexe, nationalite, adresse, email, telephone, diplome, etablissement_precedent, formation, specialisation, urgence_nom, urgence_relation, urgence_telephone, urgence_email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-                $stmt->execute([$etudiant_id, $date_naissance, $lieu_naissance, $sexe, $nationalite, $adresse, $email, $telephone, $diplome, $etablissement_precedent, $formation, $specialisation, $urgence_nom, $urgence_relation, $urgence_telephone, $urgence_email]);
+                $stmt = $pdo->prepare('INSERT INTO fiches_inscription (utilisateur_id, nom, prenom, date_naissance, lieu_naissance, sexe, nationalite, adresse, email, telephone, diplome, etablissement_precedent, formation, specialisation, urgence_nom, urgence_relation, urgence_telephone, urgence_email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+                $stmt->execute([$etudiant_id, $nom, $prenom, $date_naissance, $lieu_naissance, $sexe, $nationalite, $adresse, $email, $telephone, $diplome, $etablissement_precedent, $formation, $specialisation, $urgence_nom, $urgence_relation, $urgence_telephone, $urgence_email]);
                 $create_success = "Fiche créée avec succès !";
                 // Redirige vers dashboard pour afficher les autres boutons
                 header('Location: /inscription/index.php?page=student_dashboard');
