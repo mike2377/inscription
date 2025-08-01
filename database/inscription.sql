@@ -51,11 +51,5 @@ CREATE TABLE documents (
 
 -- Insérer un admin (mot de passe: admin123)
 INSERT INTO utilisateurs (email, telephone, mot_de_passe, role)
-VALUES ('admin@gmail.com', '656332190', '$2y$10$7rLSvRVyTQORapkDOqmkhetjh6H9lJHBxgmxJD6.Xh6YPjjGGdODu', 'admin');
+VALUES ('admin@gmail.com', '656332190', '$2y$10$2HNCELJmps8Q/QcVF.Ce9ORiCxSDPry8EAuKeQKfEEyHoujLIrgpG', 'admin');
 
--- Insérer deux étudiants (mot de passe: etudiant123)
-INSERT INTO utilisateurs (email, telephone, mot_de_passe, role)
-VALUES ('king@gmail.com', '676894321', '$2y$10$7rLSvRVyTQORapkDOqmkhetjh6H9lJHBxgmxJD6.Xh6YPjjGGdODu', 'etudiant');
-
-INSERT INTO utilisateurs (email, telephone, mot_de_passe, role)
-VALUES ('ivann@exemple.com', '689342145', '$2y$10$7rLSvRVyTQORapkDOqmkhetjh6H9lJHBxgmxJD6.Xh6YPjjGGdODu', 'etudiant');

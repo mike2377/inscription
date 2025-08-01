@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../config/database.php';
 
+
 function create_user($nom, $prenom, $email, $telephone, $mot_de_passe, $role = 'etudiant') {
     global $pdo;
     try {
