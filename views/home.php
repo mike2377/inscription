@@ -1,4 +1,5 @@
 <?php
+// KEMBOU KEUMOE Ivan Michael (L2024GLSI0021)
 error_reporting(0);
 ini_set('display_errors', 0);
 if (session_status() === PHP_SESSION_NONE) {

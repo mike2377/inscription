@@ -1,7 +1,10 @@
+
+
 <?php
+// KEMBOU KEUMOE Ivan Michael (L2024GLSI0021)
 require_once __DIR__ . '/../models/UserModel.php';
 
-// Gestion de la déconnexion
+// Traitement de la déconnexion utilisateur
 if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
     session_start();
     session_unset();
@@ -10,7 +13,9 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
     exit;
 }
 
+// Traitement des requêtes POST (inscription et connexion)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Traitement de l'inscription d'un nouvel utilisateur
     if (isset($_POST['action']) && $_POST['action'] === 'register') {
         $nom = $_POST['nom'];
         $prenom = $_POST['prenom'];
@@ -24,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo 'Erreur lors de la création du compte.';
         }
 
+    // Traitement de la connexion utilisateur
     } elseif (isset($_POST['action']) && $_POST['action'] === 'login') {
         $email = $_POST['email'];
         $password = $_POST['mot_de_passe'];

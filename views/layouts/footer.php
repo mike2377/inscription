@@ -1,3 +1,6 @@
+<?php
+// KEMBOU KEUMOE Ivan Michael (L2024GLSI0021)
+?>
 </div> <!-- Close .w3-main -->
 <footer class="footer mt-auto pt-5 pb-3 bg-dark text-white">
   <div class="container">

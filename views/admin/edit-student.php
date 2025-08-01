@@ -1,4 +1,6 @@
-<?php include_once(__DIR__ . '/../layouts/header.php'); ?>
+<?php 
+// KEMBOU KEUMOE Ivan Michael (L2024GLSI0021)
+include_once(__DIR__ . '/../layouts/header.php'); ?>
 
 <style>
 .student-detail-page {

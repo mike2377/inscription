@@ -1,16 +1,20 @@
 <?php
+// KEMBOU KEUMOE Ivan Michael (L2024GLSI0021)
 require_once __DIR__ . '/../helpers/auth.php';
 require_once __DIR__ . '/../models/RegistrationModel.php';
 require_once __DIR__ . '/../models/DocumentModel.php';
+
+// Vérifie que l'utilisateur est connecté
 require_login();
 
+// Récupère les données de l'utilisateur connecté
 $user_id = $_SESSION['user_id'];
 $fiche = get_registration_by_user($user_id);
 
-// Gestion des documents (upload, suppression, remplacement)
+// Gestion des documents : upload, suppression, remplacement
 $upload_success = '';
 if ($fiche && isset($fiche['id'])) {
-    // Upload de nouveaux documents
+    // Traitement de l'upload de nouveaux documents
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($_POST['delete_document_id']) && empty($_POST['replace_document_id'])) {
         $types = [
             'piece_identite' => "Pièce d'identité",
@@ -29,7 +33,7 @@ if ($fiche && isset($fiche['id'])) {
             }
         }
     }
-    // Suppression d'un document
+    // Traitement de la suppression d'un document
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['delete_document_id'])) {
         $doc_id = intval($_POST['delete_document_id']);
         // Récupérer le chemin du document pour suppression physique
@@ -47,7 +51,7 @@ if ($fiche && isset($fiche['id'])) {
             }
         }
     }
-    // Remplacement d'un document
+    // Traitement du remplacement d'un document
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['replace_document_id']) && !empty($_FILES['replace_file']['name'])) {
         $doc_id = intval($_POST['replace_document_id']);
         $docs = get_documents_for_fiche($fiche['id']);
@@ -69,15 +73,15 @@ if ($fiche && isset($fiche['id'])) {
             }
         }
     }
-    // Récupérer la liste à jour des documents
+    // Met à jour la liste des documents après modifications
     $documents = get_documents_for_fiche($fiche['id']);
 }
 
-// Routage simple : afficher la bonne vue
+// Routage vers la vue appropriée selon la page demandée
 if (isset($_GET['page']) && $_GET['page'] === 'student_upload_documents') {
     include_once __DIR__ . '/../views/student/upload-documents.php';
     exit;
 }
-// Par défaut, profil
+// Vue par défaut : profil étudiant
 include_once __DIR__ . '/../views/student/profile.php';
 ?>

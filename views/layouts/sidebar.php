@@ -1,4 +1,6 @@
-<?php // Sidebar obsolète, voir header.php pour la nouvelle version Bootstrap ?>
+<?php 
+// KEMBOU KEUMOE Ivan Michael (L2024GLSI0021)
+// Sidebar obsolète, voir header.php pour la nouvelle version Bootstrap ?>
 
 <?php
 // Sidebar Bootstrap moderne pour l'admin

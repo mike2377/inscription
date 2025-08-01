@@ -1,4 +1,5 @@
 <?php
+// KEMBOU KEUMOE Ivan Michael (L2024GLSI0021)
 require_once 'constants.php';
 try {
     $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);

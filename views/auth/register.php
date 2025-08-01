@@ -1,4 +1,5 @@
 <?php
+// KEMBOU KEUMOE Ivan Michael (L2024GLSI0021)
 // Empêcher l'inclusion du header/footer pour cette page
 $is_auth_page = true;
 ?>

@@ -1,7 +1,9 @@
 <?php
+// KEMBOU KEUMOE Ivan Michael (L2024GLSI0021)
 require_once __DIR__ . '/../config/database.php';
 
 
+// Crée un nouvel utilisateur avec mot de passe haché
 function create_user($nom, $prenom, $email, $telephone, $mot_de_passe, $role = 'etudiant') {
     global $pdo;
     try {
@@ -16,6 +18,7 @@ function create_user($nom, $prenom, $email, $telephone, $mot_de_passe, $role = '
     }
 }
 
+// Récupère un utilisateur par son email
 function get_user_by_email($email) {
     global $pdo;
     try {
@@ -28,6 +31,7 @@ function get_user_by_email($email) {
     }
 }
 
+// Récupère un utilisateur par son ID
 function get_user_by_id($id) {
     global $pdo;
     try {

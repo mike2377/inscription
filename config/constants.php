@@ -1,4 +1,5 @@
 <?php
+// KEMBOU KEUMOE Ivan Michael (L2024GLSI0021)
 define('BASE_URL', '/inscription/');
 define('UPLOADS_DIR', __DIR__ . '/../assets/uploads/');
 define('DB_HOST', 'localhost');

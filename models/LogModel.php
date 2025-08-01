@@ -1,4 +1,5 @@
 <?php
+// KEMBOU KEUMOE Ivan Michael (L2024GLSI0021)
 class LogModel {
     private $db;
 
@@ -6,6 +7,7 @@ class LogModel {
         $this->db = $dbConnection;
     }
 
+    // Enregistre une action utilisateur dans les logs
     public function logAction($userId, $actionType, $details = null) {
         $query = "INSERT INTO modifications 
                  (utilisateur_id, action, details) 
@@ -19,6 +21,7 @@ class LogModel {
         ]);
     }
 
+    // Récupère les logs d'activité avec limite
     public function getLogs($limit = 100) {
         $query = "SELECT m.*, u.email 
                  FROM modifications m

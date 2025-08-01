@@ -1,3 +1,4 @@
+-- KEMBOU KEUMOE Ivan Michael (L2024GLSI0021)
 CREATE DATABASE IF NOT EXISTS inscription_db;
 USE inscription_db;
 

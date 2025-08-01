@@ -9,7 +9,7 @@ function closeSidebar() {
     document.getElementById("sidebar").style.display = "none";
 }
 
-// Initialisation AOS (Animate On Scroll)
+// Initialisation Animate On Scroll
 document.addEventListener('DOMContentLoaded', function() {
     if (typeof AOS !== 'undefined') {
         AOS.init({
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Smooth scroll pour les liens d'ancrage
+// scroll pour les liens
 document.addEventListener('DOMContentLoaded', function() {
     if (typeof $ !== 'undefined') {
         $('a[href^="#"]').on('click', function(event) {
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Parallax/Zoom lent sur l'image de fond (page d'accueil)
+// Zoom lent sur l'image de fond (page d'accueil)
 document.addEventListener('DOMContentLoaded', function() {
     if (typeof $ !== 'undefined' && $('.hero-bg').length > 0) {
         $(window).on('scroll', function() {

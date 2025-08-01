@@ -1,4 +1,6 @@
 <?php
+// KEMBOU KEUMOE Ivan Michael (L2024GLSI0021)
+// Upload sécurisé d'un document avec validation
 function upload_document($file) {
     try {
         $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];

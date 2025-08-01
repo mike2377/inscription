@@ -1,5 +1,5 @@
 <?php
-// Point d'entrée principal de l'application
+// KEMBOU KEUMOE Ivan Michael (L2024GLSI0021)
 session_start();
 
 // Inclusion des constantes et de la configuration de la base de données
