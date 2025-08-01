@@ -45,13 +45,17 @@ CREATE TABLE documents (
     FOREIGN KEY (fiche_id) REFERENCES fiches_inscription(id)
 );
 
--- Insérer un admin
-INSERT INTO utilisateurs (email, telephone, mot_de_passe, role)
-VALUES ('admin@exemple.com', '0101010101', 'admin123', 'admin');
+-- Données de test avec mots de passe sécurisés
+-- Les mots de passe sont hachés avec password_hash() de PHP (algorithme bcrypt)
+-- Commande utilisée: password_hash('motdepasse', PASSWORD_DEFAULT)
 
--- Insérer deux étudiants
+-- Insérer un admin (mot de passe: admin123)
 INSERT INTO utilisateurs (email, telephone, mot_de_passe, role)
-VALUES ('jean.dupont@exemple.com', '0606060606', 'etudiant123', 'etudiant');
+VALUES ('admin@gmail.com', '656332190', '$2y$10$7rLSvRVyTQORapkDOqmkhetjh6H9lJHBxgmxJD6.Xh6YPjjGGdODu', 'admin');
+
+-- Insérer deux étudiants (mot de passe: etudiant123)
+INSERT INTO utilisateurs (email, telephone, mot_de_passe, role)
+VALUES ('king@gmail.com', '676894321', '$2y$10$7rLSvRVyTQORapkDOqmkhetjh6H9lJHBxgmxJD6.Xh6YPjjGGdODu', 'etudiant');
 
 INSERT INTO utilisateurs (email, telephone, mot_de_passe, role)
-VALUES ('claire.martin@exemple.com', '0707070707', 'etudiant456', 'etudiant');
+VALUES ('ivann@exemple.com', '689342145', '$2y$10$7rLSvRVyTQORapkDOqmkhetjh6H9lJHBxgmxJD6.Xh6YPjjGGdODu', 'etudiant');

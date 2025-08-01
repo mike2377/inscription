@@ -10,6 +10,7 @@ require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/helpers/auth.php';
 require_once __DIR__ . '/helpers/uploader.php';
 require_once __DIR__ . '/helpers/validator.php';
+require_once __DIR__ . '/helpers/security.php';
 
 // Routage simple pour charger la bonne vue/contrôleur
 $page = isset($_GET['page']) ? $_GET['page'] : 'home';
@@ -22,15 +23,21 @@ switch ($page) {
         break;
     case 'login':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'];
-            $mot_de_passe = $_POST['mot_de_passe'];
+            $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+            $mot_de_passe = trim($_POST['mot_de_passe']);
+            
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL) || empty($mot_de_passe)) {
+                $login_error = "Email ou mot de passe invalide";
+                require_once __DIR__ . '/views/auth/login.php';
+                break;
+            }
 
             // Connexion à la base de données
             $stmt = $pdo->prepare('SELECT * FROM utilisateurs WHERE email = ?');
             $stmt->execute([$email]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($user && $user['mot_de_passe'] === $mot_de_passe) { // Pour la sécurité, utilise password_hash plus tard !
+            if ($user && password_verify($mot_de_passe, $user['mot_de_passe'])) {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['role'] = $user['role'];
                 if ($user['role'] === 'admin') {
@@ -49,9 +56,15 @@ switch ($page) {
         break;
     case 'register':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'];
-            $telephone = $_POST['telephone'];
-            $mot_de_passe = $_POST['mot_de_passe'];
+            $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+            $telephone = preg_replace('/[^0-9+\-\s]/', '', trim($_POST['telephone']));
+            $mot_de_passe = trim($_POST['mot_de_passe']);
+            
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL) || empty($telephone) || strlen($mot_de_passe) < 6) {
+                $register_error = "Données invalides. Email valide, téléphone et mot de passe (6+ caractères) requis.";
+                require_once __DIR__ . '/views/auth/register.php';
+                break;
+            }
 
             // Vérifier si l'email existe déjà
             $stmt = $pdo->prepare('SELECT * FROM utilisateurs WHERE email = ?');
@@ -59,8 +72,9 @@ switch ($page) {
             if ($stmt->fetch()) {
                 $register_error = "Cet email est déjà utilisé.";
             } else {
+                $hashed_password = password_hash($mot_de_passe, PASSWORD_DEFAULT);
                 $stmt = $pdo->prepare('INSERT INTO utilisateurs (email, telephone, mot_de_passe, role) VALUES (?, ?, ?, ?);');
-                $stmt->execute([$email, $telephone, $mot_de_passe, 'etudiant']);
+                $stmt->execute([$email, $telephone, $hashed_password, 'etudiant']);
                 $register_success = "Inscription réussie. Vous pouvez maintenant vous connecter.";
             }
         }
@@ -184,11 +198,32 @@ switch ($page) {
                 ];
                 foreach ($types as $field => $label) {
                     if (!empty($_FILES[$field]['name'])) {
-                        $ext = pathinfo($_FILES[$field]['name'], PATHINFO_EXTENSION);
-                        $filename = uniqid($field.'_', true) . '.' . $ext;
+                        $file = $_FILES[$field];
+                        
+                        // Validation sécurisée
+                        $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
+                        $max_size = 5 * 1024 * 1024; // 5MB
+                        
+                        if ($file['error'] !== UPLOAD_ERR_OK || 
+                            $file['size'] > $max_size || 
+                            !in_array($file['type'], $allowed_types)) {
+                            $upload_error = "Fichier invalide pour $label. Types autorisés: JPG, PNG, GIF, PDF (max 5MB)";
+                            continue;
+                        }
+                        
+                        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+                        $allowed_ext = ['jpg', 'jpeg', 'png', 'gif', 'pdf'];
+                        if (!in_array($ext, $allowed_ext)) {
+                            $upload_error = "Extension non autorisée pour $label";
+                            continue;
+                        }
+                        
+                        $filename = bin2hex(random_bytes(16)) . '.' . $ext;
                         $dest = 'uploads/' . $filename;
-                        if (!is_dir('uploads')) mkdir('uploads');
-                        if (move_uploaded_file($_FILES[$field]['tmp_name'], $dest)) {
+                        
+                        if (!is_dir('uploads')) mkdir('uploads', 0755, true);
+                        
+                        if (move_uploaded_file($file['tmp_name'], $dest)) {
                             $stmt = $pdo->prepare('INSERT INTO documents (fiche_id, type_document, chemin) VALUES (?, ?, ?)');
                             $stmt->execute([$fiche['id'], $label, $dest]);
                             $upload_success = ($upload_success ?? '') . " $label envoyé.";
